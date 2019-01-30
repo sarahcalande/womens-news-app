@@ -3,64 +3,42 @@ from bs4 import BeautifulSoup
 
 
 
+def scrape():
+    l =[]
+    r = requests.get('https://www.forbes.com/forbeswomen/feed2/')
+    soup = BeautifulSoup(r.text, "html.parser")
 
-page = requests.get('https://www.forbes.com/forbeswomen/')
-soup = BeautifulSoup(page.content, 'html.parser')
-
-
-
-
-weblinks = soup.find_all('.stream-article-wrapper ng-scope')
-
-pagelinks = []
-
-for link in weblinks[1:]:
-      url = link.contents[0].find_all('a')[0]
-      pagelinks.append('http://forbes.com/'+url.get('href'))
+    channel = soup.find('channel')
 
 
-print(soup.body)
+    for item in channel:
+        data = {}
+
+        article_image = item.find('media:content')
+        data['article_image'] = str(article_image)
 
 
-authorname = []
-title = []
-thearticle = []
-for link in pagelinks:
-    # store the text for each article
-    paragraphtext = []
-    # get url
-    url = link
-    # get page text
-    page = requests.get(url)
-    # parse with BFS
-    soup = BeautifulSoup(page.text, 'html.parser')
-    # get author name, if there's a named author
-    try:
-        abody = soup.find(class_='.stream-article-wrapper ng-scope').find('a')
-        aname = abody.get_text()
-    except:
-        aname = 'Anonymous'
-    # get article title
-    atitle = soup.find(class_=".ng-binding")
-    thetitle = atitle.get_text()
-    # get main article page
-    articlebody = soup.find(class_='_61c55')
-    # get text
-    articletext = soup.find_all('p')[8:]
-    # print text
-    for paragraph in articletext[:-1]:
-        # get the text only
-        text = paragraph.get_text()
-        paragraphtext.append(text)
-    # combine all paragraphs into an article
-    thearticle.append(paragraphtext)
-    authorname.append(aname)
-    title.append(thetitle)
-myarticle = [' '.join(article) for article in thearticle]
 
-# save article data to file
-data = {'Title':title,
-        'Author':authorname,
-        'PageLink':pagelinks,
-        'Article':myarticle,
-        'Date':datetime.now()}
+        article_title = item.find('title')
+        article_link = item.find('link')
+        data['article_title'] = str(article_title)
+        data['article_link'] = str(article_link)
+
+        article_author = item.find('atom:name')
+        data['article_author'] = str(article_author)
+
+        article_date = item.find('pubDate')
+        data['article_date'] = str(article_date)
+
+
+        article_description = item.find('description')
+        data['description'] = str(article_description)
+
+
+        l.append(data)
+
+    return l
+
+
+if __name__ == "__main__":
+    print(scrape())
