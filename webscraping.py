@@ -38,7 +38,7 @@ def scrape():
 
         l.append(data)
 
-    return l[1::2]
+    return l[13::2]
 
 
 if __name__ == "__main__":
