@@ -1,57 +1,52 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import ArticleCard from './ArticlesCard.js'
-import { FlatList } from 'react-native'
+import { FlatList, ActivityIndicator, Text, View } from 'react-native';
+// import ArticleCard from './ArticlesCard.js'
 
 
 export default class App extends React.Component {
 
-
-state = {
-  articles: []
-}
-
-componentDidMount=()=>{
-  fetch('http://localhost:3000/')
-  .then(r=>r.json())
-  .then(data => this.setState({
-    articles: data
-  }))
+constructor(props){
+  super(props);
+this.state = { isLoading: true }
 }
 
 
+componentDidMount(){
+  return fetch('http://localhost:3000/')
+  .then((response)=> response.json())
+  .then((responseJson) => {this.setState({
+    isLoading: false,
+    dataSource: responseJson.Articles
+  }, function(){
 
-renderItem(data) {
-    return <TouchableOpacity style={{backgroundColor: 'transparent'}}>
-                <View style={styles.listItemContainer}>
-                    <Text style={styles.pokeItemHeader}>{data.item.article_title}</Text>
-                </View>
-            </TouchableOpacity>
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+  }
+
+
+  render(){
+
+// console.log(this.state.articles)
+
+if(this.state.isLoading){
+  return(
+    <View style={{flex: 1, padding: 20}}>
+      <ActivityIndicator/>
+    </View>
+  )
 }
 
-
-
-  render() {
-
-console.log(this.state.articles) //array
-
-  let articlecards = this.state.articles
-    return (
-      <FlatList
-      data = {articlecards}
-      renderItem = {this.renderItem}
-       keyExtractor={(item) => item.article_title}
-
-      />
+return (
+      <View style={{flex: 1, paddingTop:20}}>
+        <FlatList
+          data={this.state.dataSource}
+          renderItem={({item}) => <Text>{item.article_title}</Text>}
+        />
+      </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
