@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-
+#starts at [13]
 
 def scrape():
     l =[]
@@ -10,6 +10,8 @@ def scrape():
 
     channel = soup.find('channel')
 
+
+    print(channel)
 
     for item in channel:
         data = {}
@@ -20,19 +22,18 @@ def scrape():
 
 
         article_title = item.find('title')
-        article_link = item.find('link')
-        data['article_title'] = str(article_title)
+        article_link = item
+        data['article_title'] = str(article_title).strip('<title>').strip('</')
         data['article_link'] = str(article_link)
-
         article_author = item.find('atom:name')
-        data['article_author'] = str(article_author)
+        data['article_author'] = str(article_author).strip('<atom:name>')
 
-        article_date = item.find('pubDate')
-        data['article_date'] = str(article_date)
+        article_date = item.find('pubdate')
+        data['article_date'] = str(article_date).strip('<pubdate>').strip(': -0500</')
 
 
         article_description = item.find('description')
-        data['description'] = str(article_description)
+        data['description'] = str(article_description).strip('<description>').strip('/>').strip('<')
 
 
         l.append(data)
