@@ -44,7 +44,7 @@ return (
       <View style={{flex: 1, paddingTop:20}}>
         <FlatList
           data={this.state.dataSource}
-          renderItem={({item}) => <Text>{item.article_title}</Text>}
+          renderItem={({item}) => <Text>{item.article_title}, {item.article_date}, {item.article_author}, {item.article_link}, {item.article_image}, {item.description}</Text>}
         />
       </View>
     );
