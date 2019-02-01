@@ -1,6 +1,21 @@
 import React from 'react';
-import { FlatList, ActivityIndicator, Text, View } from 'react-native';
+import { FlatList, ActivityIndicator, Text, View, Image, Linking, StyleSheet } from 'react-native';
+import { ListItem } from "react-native-elements";
 // import ArticleCard from './ArticlesCard.js'
+
+
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 20,
+  },
+  img: {
+    width: 193,
+    height: 110,
+  },
+});
 
 
 export default class App extends React.Component {
@@ -28,6 +43,9 @@ componentDidMount(){
   }
 
 
+
+
+
   render(){
 
 // console.log(this.state.articles)
@@ -40,13 +58,31 @@ if(this.state.isLoading){
   )
 }
 
+
+
 return (
-      <View>
         <FlatList
           data={this.state.dataSource}
-          renderItem={({item}) => <Text>{item.article_title}, {item.article_date}, {item.article_author}, {item.article_link}, {item.article_image}, {item.description}</Text>}
+          renderItem={({item}) => (
+      <ListItem
+      title={item.article_title}
+      subtitle={
+        <View style={styles.container}>
+            <Image
+              source={{ uri: item.article_image }}
+              style={styles.img}
+            />
+        <Text> {item.article_date} </Text>
+        <Text> {item.article_author} </Text>
+        <Text> {item.description} </Text>
+        </View>
+      }
+      onPress={()=>{Linking.openURL(item.article_link)}}
+      />
+
+
+    )}
         />
-      </View>
     );
   }
 }
