@@ -17,16 +17,16 @@ def scrape():
         data = {}
 
         article_image = item.find('media:content')
-        data['article_image'] = str(article_image).rsplit('<media:thumbnail ', 1)[0]
+        data['article_image'] = str(article_image).split('">')[0].strip('<media:content medium="image" url=')
 
 
 
         article_title = item.find('title')
         article_link = item
         data['article_title'] = str(article_title).strip('<title>').strip('</')
-        data['article_link'] = str(article_link).strip('<item>').rsplit(' <title>', 1)[0]
+        data['article_link'] = str(article_link).rstrip(' <title>')
         article_author = item.find('atom:name')
-        data['article_author'] = str(article_author).strip('<atom:name>')
+        data['article_author'] = str(article_author).strip('<atom:name>').rstrip(', Contributor</')
 
         article_date = item.find('pubdate')
         data['article_date'] = str(article_date).strip('<pubdate>').strip(': -0500</')
