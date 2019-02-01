@@ -24,7 +24,7 @@ def scrape():
         article_title = item.find('title')
         article_link = item
         data['article_title'] = str(article_title).strip('<title>').strip('</')
-        data['article_link'] = str(article_link).rstrip(' <title>')
+        data['article_link'] = str(article_link).split(' <t')[0].lstrip("<item> <link/>").replace('<link/>','').strip()
         article_author = item.find('atom:name')
         data['article_author'] = str(article_author).strip('<atom:name>').rstrip(', Contributor</')
 
