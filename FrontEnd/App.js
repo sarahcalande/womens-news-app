@@ -8,12 +8,15 @@ import { ListItem } from "react-native-elements";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: 20,
+    flex: 1
   },
+  title: {
+  fontSize: 30,
+  fontWeight: 'bold',
+},
   img: {
-    width: 193,
-    height: 110,
+    width: 410,
+    height: 220,
   },
 });
 
