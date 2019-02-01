@@ -8,16 +8,23 @@ import { ListItem } from "react-native-elements";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    alignContent: 'center'
   },
   title: {
-  fontSize: 30,
-  fontWeight: 'bold',
+  fontSize: 100,
+  alignSelf: 'center'
 },
   img: {
-    width: 410,
-    height: 220,
+    alignSelf: 'center',
+        height: 240,
+        width: 420,
+        margin: 10
   },
+  subtitle: {
+    padding: 20,
+    textAlign: 'center'
+  }
 });
 
 
@@ -64,20 +71,23 @@ if(this.state.isLoading){
 
 
 return (
-        <FlatList
+        <FlatList style={styles.container,{ paddingTop: 40, paddingSide: 30}}
           data={this.state.dataSource}
           renderItem={({item}) => (
       <ListItem
-      title={item.article_title}
+      title={
+        <View style={styles.title}>
+        <Text style={{fontSize: 20, textAlign: 'center', fontWeight: 'bold' }}>{item.article_title}</Text>
+      </View>
+    }
       subtitle={
         <View style={styles.container}>
             <Image
               source={{ uri: item.article_image }}
               style={styles.img}
             />
-        <Text> {item.article_date} </Text>
-        <Text> {item.article_author} </Text>
-        <Text> {item.description} </Text>
+        <Text style={{ fontFamily: 'Helvetica', textAlign: 'center' }}> {item.article_date} by {item.article_author} </Text>
+        <Text style={{ fontFamily: 'Helvetica', textAlign: 'center' }}> {item.description} </Text>
         </View>
       }
       onPress={()=>{Linking.openURL(item.article_link)}}
